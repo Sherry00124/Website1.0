@@ -4,10 +4,11 @@
     </div>
 </template>
 <script>
-import addnode from "./AddNode.vue"
+import addnode from "./XAddNode.vue"
 export default{
     components: {
     addnode,
+
 
   },
 }

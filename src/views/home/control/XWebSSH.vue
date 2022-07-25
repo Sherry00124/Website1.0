@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Console from './Mconsole.vue'
+import Console from './Xconsole.vue'
 
 export default {
     name: 'WebSSH',
