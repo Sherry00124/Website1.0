@@ -55,8 +55,8 @@
     <i class="el-icon-user "></i>
   </el-button>
   <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item><router-link to="./UserIndex" class="redTextWithoutUnderline">个人中心</router-link> </el-dropdown-item>
-    <el-dropdown-item><router-link to="./Login" class="redTextWithoutUnderline">退出</router-link> </el-dropdown-item>
+    <el-dropdown-item><el-button type="text" @click="$router.replace({name: 'UserIndex'})">个人中心</el-button></el-dropdown-item>
+    <el-dropdown-item ><el-button type="text" @click="LogOut">退出</el-button></el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
 {{ userInfo.name }}
@@ -99,29 +99,26 @@
 
 <script>
 import storageService from '../service/storageService';
-// import Nav from "./nav.vue";
-// import Bread from "./breadcrumbs.vue";
+
 export default {
   name: "Home",
   data() {
     return {};
   },
-  components: {
-    // Nav,
-    // Bread,
-  },
   computed:{
     userInfo(){
-      return JSON.parse(storageService.get(storageService.USER_INFO))
+      return storageService.get(storageService.USER_INFO)?JSON.parse(storageService.get(storageService.USER_INFO)):null
     }
   },
   methods: {
-    LogOut() {
-      // this.$router.push("./Login"); //跳转到主页
+    LogOut(){
       // sessionStorage.clear("username", name); //缓存
       //清除token
-
-      //
+      storageService.set(storageService.USER_TOKEN,"")
+      //清除用户信息
+      storageService.set(storageService.USER_INFO,"")
+      //跳转到主页
+      this.$router.push("./Login"); //跳转到登录页面
     },
   },
 };

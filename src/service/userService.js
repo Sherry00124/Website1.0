@@ -17,6 +17,6 @@ const info =() =>{
 export default{
     // register,
     info,
-    login,
-    register,
+    // login,
+    // register,
 }
