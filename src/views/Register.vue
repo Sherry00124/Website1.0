@@ -47,8 +47,9 @@
 }
 </style>
 <script>
-import storageService from "../service/storageService";
+// import storageService from "../service/storageService";
 import userService from "../service/userService";
+import {mapMutations} from 'vuex';
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -109,9 +110,7 @@ export default {
   },
 
   methods: {
-    // register(){
-    //   console.log('register')
-    // },
+    ...mapMutations('userMoudle',['SET_TOKEN','SET_USERINFO']),
     submitForm(formName) {
       //验证数据
       this.$refs[formName].validate(valid => {
@@ -129,17 +128,21 @@ export default {
               if (Response.data.code === 200) {
                 //如果后端返回的状态码是200
                 //保存token
-                //localStorage.setItem("token", Response.data.data.token);
-                storageService.set(storageService.USER_TOKEN,Response.data.data.token)
+                this.SET_TOKEN(res.data.data.token)
+                //this.$store.commit('userMoudel/SET_TOKEN',res.data.data.token);
+                //storageService.set(storageService.USER_TOKEN,Response.data.data.token)
                 // alert("注册成功！");
                 //保存用户信息
+                
                 userService.info().then((reponse) => {
-                  storageService.set(storageService.USER_INFO,JSON.stringify(reponse.data.data.user))
+                  this.SET_USERINFO(reponse.data.data.user)
+                //this.$store.commit('userMoudel/SET_USERINFO',reponse.data.data.user);
+                //   storageService.set(storageService.USER_INFO,JSON.stringify(reponse.data.data.user))
+                 //跳转主页
                   this.$router.push({
                   path: "/Home"
                 });
                 })
-                //跳转主页
                 
               }
               if (Response.data.code === 422) {

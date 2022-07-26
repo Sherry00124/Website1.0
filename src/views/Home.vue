@@ -32,20 +32,6 @@
         </el-menu>
 
         <div style="margin: 350px 0"></div>
-        <!-- <el-tooltip
-          class="item"
-          effect="dark"
-          content="退出"
-          placement="right-start"
-        >
-          <el-button
-            type="info"
-            icon="el-icon-close"
-            size="small"
-            @click="goBack()"
-            circle
-          ></el-button>
-        </el-tooltip> -->
       </el-aside>
       <!-- head -->
       <el-container>
@@ -59,7 +45,7 @@
     <el-dropdown-item ><el-button type="text" @click="LogOut">退出</el-button></el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
-{{ userInfo.name }}
+<!-- {{ userInfo.name }} -->
         </el-header>
         <!-- main -->
         <el-main>
@@ -98,17 +84,17 @@
 
 
 <script>
-import storageService from '../service/storageService';
-
+//import storageService from '../service/storageService';
+import {mapState} from 'vuex';
 export default {
   name: "Home",
   data() {
     return {};
   },
   computed:{
-    userInfo(){
-      return storageService.get(storageService.USER_INFO)?JSON.parse(storageService.get(storageService.USER_INFO)):null
-    }
+    userInfo: mapState({
+      userInfo: (state) => state.userModule.userInfo,
+    })
   },
   methods: {
     LogOut(){

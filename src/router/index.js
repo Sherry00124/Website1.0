@@ -1,8 +1,7 @@
-import Vue from 'vue'
+import Vue, { shallowReactive } from 'vue'
 import Router from 'vue-router'
 
-import Register from '../views/Register'
-import Login from '../views/Login'
+
 import Home from '../views/Home'
 
 import Control from '../views/home/Control'
@@ -19,14 +18,19 @@ import WebSSH from '../views/home/control/XWebSSH'
 import CV from '../views/tool/CV.vue'
 import Copy from '../views/tool/Copy.vue'
 
-import UserIndex from '../views/user/UserIndex'
+
+import userRoute from './moudle/user'
+
+import userModule from '@/store/module/user'
+
 Vue.use(Router)
 
 
 
-export default new Router({
+const router=new Router({
   mode: 'history',
   routes: [
+    ...userRoute,
     {
       path: '/copy',
       name: 'copy',
@@ -37,43 +41,8 @@ export default new Router({
       name: 'cv',
       component: CV,
     },
-    {
-      path: '/control/UserIndex',
-      redirect: '/UserIndex'
-    },
-    {
-      path: '/UserIndex',
-      name: 'UserIndex',
-      component: UserIndex
-
-    },
-    {
-      path: '/',
-      redirect: '/Login'
-    },
-    {
-      path: '/control/Login',
-      redirect: '/Login'
-    },
-    {
-      path: '/home/Login',
-      redirect: '/Login'
-    },
-    {
-      path: '/Login',
-      name: 'Login',
-      component: Login
-    },
-    {
-      path: '/Register',
-      name: 'Register',
-      component: Register
-
-    },
-    // {
-    //   path: '/Home',
-    //   redirect:'/Home:id',
-    // },
+    
+  
     {
       path: '/Home',
       name: 'Home',
@@ -133,3 +102,20 @@ export default new Router({
   ],
 
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth ) {//判断是否需要登录
+
+    //判断用户是否登录
+    if(userModule.token){
+      //判断token的有效性，需要后台发放token时带上token的有效期
+      next();
+    }else{
+      //没有登录则跳转登录
+      router.push({name: 'Login'})
+    }
+  }else{
+    next();
+  }
+})
+export default router;

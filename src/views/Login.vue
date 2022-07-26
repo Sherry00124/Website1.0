@@ -96,10 +96,10 @@ export default {
                 //如果后端返回的状态码是200
                 //保存token
                 //localStorage.setItem("token", Response.data.data.token);
-                storageService.set(storageService.USER_TOKEN,Response.data.data.token)
-                // alert("注册成功！");
+                storageService.set(storageService.USER_TOKEN,Response.data.data.token)              
                 //保存用户信息
                 userService.info().then((reponse) => {
+                  
                   storageService.set(storageService.USER_INFO,JSON.stringify(reponse.data.data.user))
                   this.$router.push({
                   path: "/Home"
