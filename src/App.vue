@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/cv">鼠标右键</router-link>
-      <router-link to="/copy">复制粘贴</router-link>
+      <!-- <router-link to="/cv">鼠标右键</router-link>
+      <router-link to="/copy">复制粘贴</router-link> -->
       <router-view />
       </div>
   </div>

@@ -42,13 +42,16 @@
   </el-button>
   <el-dropdown-menu slot="dropdown">
     <el-dropdown-item><el-button type="text" @click="$router.replace({name: 'UserIndex'})">个人中心</el-button></el-dropdown-item>
-    <el-dropdown-item ><el-button type="text" @click="LogOut">退出</el-button></el-dropdown-item>
+    <el-dropdown-item v-if="userInfo"><el-button type="text" @click="LogOut">退出</el-button></el-dropdown-item>
+    <el-dropdown-item v-if="!userInfo"><el-button type="text" @click="$router.replace({name: 'Login'})">登录</el-button></el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
-<!-- {{ userInfo.name }} -->
+<span v-if="userInfo">{{ userInfo.name }}</span>
+
         </el-header>
         <!-- main -->
         <el-main>
+          
           <router-view />
         </el-main>
       </el-container>
@@ -84,28 +87,39 @@
 
 
 <script>
-//import storageService from '../service/storageService';
+import storageService from '../service/storageService';
+import userModule from '../store/module/user';
 import {mapState} from 'vuex';
+import { mapActions } from 'vuex';
 export default {
   name: "Home",
   data() {
     return {};
   },
-  computed:{
-    userInfo: mapState({
+  // computed:{
+  //   userInfo(){
+  //     return this.$store.state.userModule.userInfo;
+  //   },
+  // },
+  computed: mapState({
       userInfo: (state) => state.userModule.userInfo,
-    })
-  },
-  methods: {
-    LogOut(){
-      // sessionStorage.clear("username", name); //缓存
-      //清除token
-      storageService.set(storageService.USER_TOKEN,"")
-      //清除用户信息
-      storageService.set(storageService.USER_INFO,"")
-      //跳转到主页
-      this.$router.push("./Login"); //跳转到登录页面
-    },
-  },
+    }),
+    // computed:{
+  //   userInfo(){
+  //     return JSON.parse(storageService.get(storageService.USER_INFO))
+  //   },
+  // },
+methods: mapActions('userModule',['LogOut']),
+  // methods: {
+  //   LogOut(){
+  //     // sessionStorage.clear("username", name); //缓存
+  //     //清除token
+  //     storageService.set(storageService.USER_TOKEN,"")
+  //     //清除用户信息
+  //     storageService.set(storageService.USER_INFO,"")
+  //     //跳转到主页
+  //     this.$router.push("./Login"); //跳转到登录页面
+  //   },
+  // },
 };
 </script>

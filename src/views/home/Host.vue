@@ -6,8 +6,8 @@
     style="width: 100%"
     max-height="250"
   >
-    <el-table-column fixed v-bind:prop="number" label="编号" width="60">
-    </el-table-column>
+    <!-- <el-table-column fixed v-bind:prop="number" label="编号" width="60">
+    </el-table-column> -->
     <el-table-column
       prop="tag"
       label="状态"

@@ -47,9 +47,11 @@
 }
 </style>
 <script>
-// import storageService from "../service/storageService";
+import storageService from "../service/storageService";
 import userService from "../service/userService";
-import {mapMutations} from 'vuex';
+import { mapMutations } from "vuex";
+import { Commit } from "vuex";
+import store from "../store";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -71,7 +73,6 @@ export default {
         callback();
       }
     };
-  
 
     return {
       ruleForm: {
@@ -110,50 +111,55 @@ export default {
   },
 
   methods: {
-    ...mapMutations('userMoudle',['SET_TOKEN','SET_USERINFO']),
+    ...mapMutations("userModule", ["SET_TOKEN", "SET_USERINFO"]),
     submitForm(formName) {
       //验证数据
       this.$refs[formName].validate(valid => {
         if (valid) {
           //请求
-          this.axios //用this.$axios就代表main.js中的Vue.prototype.$axios = axios的axios
-            .post("http://localhost:8080/Register", {
+          // this.$store.dispatch("userModule/register", this.user).then(() => {//使用vuex的dispatch
+          //   //跳转主页
+          //   this.$router.push({
+          //     path: "/Home"
+          //   });
+          // }
+          this.axios.post("http://localhost:8080/Register", {
               //用post方法传 输入框输入的用户名和密码
               name: this.ruleForm.name,
               password: this.ruleForm.password,
               telephone: this.ruleForm.telephone
-            })
-            .then(Response => {
-              //回调函数当post成功后执行
-              if (Response.data.code === 200) {
-                //如果后端返回的状态码是200
+            }).then(Response => {
                 //保存token
-                this.SET_TOKEN(res.data.data.token)
-                //this.$store.commit('userMoudel/SET_TOKEN',res.data.data.token);
+                this.SET_TOKEN(Response.data.data.token);
+                //this.$store.commit('userModule/SET_TOKEN',Response.data.data.token);
                 //storageService.set(storageService.USER_TOKEN,Response.data.data.token)
                 // alert("注册成功！");
                 //保存用户信息
-                
-                userService.info().then((reponse) => {
-                  this.SET_USERINFO(reponse.data.data.user)
-                //this.$store.commit('userMoudel/SET_USERINFO',reponse.data.data.user);
-                //   storageService.set(storageService.USER_INFO,JSON.stringify(reponse.data.data.user))
-                 //跳转主页
+                userService.info().then(response => {
+                  this.SET_USERINFO(response.data.data.user);
+                  //this.$store.commit('userModule/SET_USERINFO',response.data.data.user);
+                  //storageService.set(storageService.USER_INFO,JSON.stringify(response.data.data.user))
+                  this.$notify({
+                    title: "成功",
+                    message: this.$createElement("i", { style: "color: teal" }, Response.data.msg),
+                    type: 'success',
+                  });
+                  //跳转主页
                   this.$router.push({
-                  path: "/Home"
+                    path: "/Home"
+                  });
                 });
-                })
-                
-              }
-              if (Response.data.code === 422) {
-              }
-            })
-            .catch(function(error) {
-              // 请求失败处理
-              console.log("ERR:", error);
+            }).catch((error) =>{
+              this.$notify.error({
+                    title: "错误",
+                    message: this.$createElement("i", { style: "color: teal" }, error.response.data.msg),
             });
-        } else {
-          console.log("用户名&密码不匹配");
+            })
+            }else {
+          this.$notify.error({
+                    title: "错误",
+                    message: this.$createElement("i", { style: "color: teal" }, '请输入正确的用户信息'),
+                  });
           return false;
         }
       });

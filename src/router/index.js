@@ -19,10 +19,9 @@ import CV from '../views/tool/CV.vue'
 import Copy from '../views/tool/Copy.vue'
 
 
-import userRoute from './moudle/user'
+import userRoute from './module/user'
 
-import userModule from '@/store/module/user'
-
+import storageService from "../service/storageService";
 Vue.use(Router)
 
 
@@ -31,25 +30,33 @@ const router=new Router({
   mode: 'history',
   routes: [
     ...userRoute,
-    {
-      path: '/copy',
-      name: 'copy',
-      component: Copy,
-    },
-    {
-      path: '/cv',
-      name: 'cv',
-      component: CV,
-    },
+    // {
+    //   path: '/copy',
+    //   name: 'copy',
+    //   component: Copy,
+    // },
+    // {
+    //   path: '/cv',
+    //   name: 'cv',
+    //   component: CV,
+    // },
     
   
     {
       path: '/Home',
       name: 'Home',
       component: Home,
+      // meta: {
+      //   auth:true,//需要认证的路由
+      // },
       children: [
         // {path: '/home/scan',component:scan},
-        { path: '/home/Host', component: Host },
+        { path: '/home/Host', 
+        component: Host,
+        meta: {
+          auth:true,
+        }, 
+        },
         { path: '/home/Kit', component: Kit },
 
       ]
@@ -96,7 +103,8 @@ const router=new Router({
 
       ],
       meta: {
-        showfater: true
+        showfater: true,//父组件展示
+        // auth:true,//需要认证的路由
       }
     },
   ],
@@ -105,9 +113,9 @@ const router=new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.auth ) {//判断是否需要登录
-
+    
     //判断用户是否登录
-    if(userModule.token){
+    if(storageService.USER_TOKEN){
       //判断token的有效性，需要后台发放token时带上token的有效期
       next();
     }else{

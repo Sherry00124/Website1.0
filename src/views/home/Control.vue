@@ -10,11 +10,12 @@
     <i class="el-icon-user "></i>
   </el-button>
   <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item><router-link to="./UserIndex" class="redTextWithoutUnderline">个人中心</router-link> </el-dropdown-item>
-    
-    <el-dropdown-item><router-link to="./Login" class="redTextWithoutUnderline">退出</router-link></el-dropdown-item>
+    <el-dropdown-item><el-button type="text" @click="$router.replace({name: 'UserIndex'})">个人中心</el-button></el-dropdown-item>
+    <el-dropdown-item ><el-button type="text" @click="LogOut">退出</el-button></el-dropdown-item>
+    <el-dropdown-item><el-button type="text" @click="$router.replace({name: 'Login'})">登录</el-button></el-dropdown-item>
   </el-dropdown-menu>
 </el-dropdown>
+{{ userInfo.name }}
     </el-header>
     
     <el-main>
@@ -50,7 +51,8 @@
 
 <script>
 import Nav from "./Cnav.vue";
-
+import { mapActions } from 'vuex';
+import { mapState } from "vuex";
   export default {
     props:['number'],
     name: "Control",
@@ -60,6 +62,10 @@ import Nav from "./Cnav.vue";
         
       }
     },
+    methods: mapActions('userModule',['LogOut']),
+      computed: mapState({
+      userInfo: (state) => state.userModule.userInfo,
+    }),
     components: {
     Nav,
 
