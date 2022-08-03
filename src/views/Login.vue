@@ -101,6 +101,7 @@ export default {
                 userService.info().then((reponse) => {
                   
                   storageService.set(storageService.USER_INFO,JSON.stringify(reponse.data.data.user))
+                  this.$message.success("登录成功")
                   this.$router.push({
                   path: "/Home"
                 });

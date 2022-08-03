@@ -50,8 +50,6 @@
 import storageService from "../service/storageService";
 import userService from "../service/userService";
 import { mapMutations } from "vuex";
-import { Commit } from "vuex";
-import store from "../store";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -139,27 +137,17 @@ export default {
                   this.SET_USERINFO(response.data.data.user);
                   //this.$store.commit('userModule/SET_USERINFO',response.data.data.user);
                   //storageService.set(storageService.USER_INFO,JSON.stringify(response.data.data.user))
-                  this.$notify({
-                    title: "成功",
-                    message: this.$createElement("i", { style: "color: teal" }, Response.data.msg),
-                    type: 'success',
-                  });
+                  this.$message.success(Response.data.msg)
                   //跳转主页
                   this.$router.push({
                     path: "/Home"
                   });
                 });
             }).catch((error) =>{
-              this.$notify.error({
-                    title: "错误",
-                    message: this.$createElement("i", { style: "color: teal" }, error.response.data.msg),
-            });
+            this.$message.error(error.response.data.msg)
             })
             }else {
-          this.$notify.error({
-                    title: "错误",
-                    message: this.$createElement("i", { style: "color: teal" }, '请输入正确的用户信息'),
-                  });
+          this.$message.error("请输入正确的用户信息")
           return false;
         }
       });

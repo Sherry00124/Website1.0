@@ -3,23 +3,41 @@
     <!-- @contextmenu鼠标右键显示菜单事件 -->
     <!-- 给vue组件绑定事件时候，组件加上.native才能监听原生事件，否则会认为监听的是来自Item组件自定义的事件， -->
     <!-- .prevent用来阻止浏览器默认事件，因浏览器右键会显示自己设置好的菜单所以需要设置默认阻止事件 -->
-    <el-button type="primary" @contextmenu.prevent.native="openMenu($event)"
-      ><input type="text" v-model="message" /></el-button>
+    <el-row :gutter="10">
+  <el-col :span="12"  @contextmenu.prevent.native="openMenu($event)">
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址">
+      </el-table-column>
+    </el-table>
+    <div class="grid-content bg-purple"></div></el-col>
+  <el-col :span="12"><div class="grid-content bg-purple-light"></div></el-col>
+</el-row>
+
     <!-- 因右键自定义菜单事件需要获取当前点击的位置，所以此处绑定动态样式来控制菜单实时跟踪鼠标右键点击位置 -->
-    <ul
-      v-show="visible"
-      :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu"
-    >
-      <li><el-button 
-      type="text" 
-      icon="el-icon-document-copy"
-      @click="doCopy">复制
-      </el-button></li>
-      <li><el-button 
-      type="text" 
-      icon="el-icon-document">粘贴
-      </el-button></li>
+    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
+      <li>
+        <el-button type="text" icon="el-icon-document-copy" @click="doCopy">复制</el-button>
+      </li>
+      <li>
+        <el-button type="text" icon="el-icon-refresh">刷新</el-button>
+      </li>
+      <li>
+        <el-button type="text" icon="el-icon-upload">文件上传</el-button>
+      </li>
     </ul>
   </div>
 </template>
@@ -32,6 +50,23 @@ export default {
       visible: false,
       top: 0,
       left: 0,
+      tableData: [{
+            date: '2016-05-02',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1518 弄'
+          }, {
+            date: '2016-05-04',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1517 弄'
+          }, {
+            date: '2016-05-01',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1519 弄'
+          }, {
+            date: '2016-05-03',
+            name: '王小虎',
+            address: '上海市普陀区金沙江路 1516 弄'
+          }]
     };
   },
   watch: {
@@ -48,7 +83,7 @@ export default {
         // 移除body上添加的事件处理程序
         document.body.removeEventListener("click", this.closeMenu);
       }
-    },
+    }
   },
   methods: {
     //右击
@@ -64,26 +99,25 @@ export default {
       this.visible = false; //关闭菜单
     },
     doCopy: function() {
-        this.$copyText(this.message).then(
+      this.$copyText(this.message).then(
         function(e) {
-            alert("Copied");
-            console.log(e);
+          alert("Copied");
+          console.log(e);
         },
         function(e) {
-            alert("Can not copy");
-            console.log(e);
+          alert("Can not copy");
+          console.log(e);
         }
-        );
-    },
-    
-  },
+      );
+    }
+  }
 };
 </script>
 
 <style scoped>
 .contextmenu {
   margin: 0;
-  background: #fff;
+  background: rgb(255, 255, 255);
   z-index: 3000;
   position: fixed;
   list-style-type: none;
@@ -92,7 +126,7 @@ export default {
   font-size: 12px;
   font-weight: 400;
   color: #333;
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 3px 0 rgba(239, 80, 80, 0.3);
 }
 
 .contextmenu li {
@@ -101,6 +135,23 @@ export default {
   cursor: pointer;
 }
 .contextmenu li:hover {
-  background: #eee;
+  background: rgb(246, 148, 148);
 }
+
+.el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
 </style>

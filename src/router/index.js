@@ -14,14 +14,21 @@ import Kit from '../views/home/Kit'
 import Cascade from '../views/home/control/Cascade'
 import Xshell from '../views/home/control/Xshell'
 import WebSSH from '../views/home/control/XWebSSH'
-
-import CV from '../views/tool/CV.vue'
-import Copy from '../views/tool/Copy.vue'
+import UserIndex from '@/views/user/UserIndex'
+import muma from '../views/home/muma.vue'
+import Other from '../views/home/control/Other'
 
 
 import userRoute from './module/user'
 
 import storageService from "../service/storageService";
+import toolRoute from './module/tools'
+
+import connect from '@/views/tool/connect.vue'
+import rconnect from '@/views/tool/rconnect.vue'
+import command from '@/views/tool/command.vue'
+import forwardL2R from '@/views/tool/forwardL2R.vue'
+import rlisten from '@/views/tool/rlisten.vue'
 Vue.use(Router)
 
 
@@ -30,18 +37,8 @@ const router=new Router({
   mode: 'history',
   routes: [
     ...userRoute,
-    // {
-    //   path: '/copy',
-    //   name: 'copy',
-    //   component: Copy,
-    // },
-    // {
-    //   path: '/cv',
-    //   name: 'cv',
-    //   component: CV,
-    // },
-    
-  
+    ...toolRoute,
+
     {
       path: '/Home',
       name: 'Home',
@@ -57,7 +54,16 @@ const router=new Router({
           auth:true,
         }, 
         },
+        {
+          path: '/home/UserIndex',
+          name: 'UserIndex',
+          component: UserIndex,
+          meta:{
+              auth:true,//需要认证的路由
+          }
+      },
         { path: '/home/Kit', component: Kit },
+        { path: '/home/muma', component: muma },
 
       ]
     },
@@ -75,7 +81,7 @@ const router=new Router({
           },
         },
         {
-          path: '/control/Manage', component: Manage, meta: {
+          name:'Manage', path: '/control/Manage/:id/:hostName/:address/:edgeAddress', component: Manage, meta: {
             showfater: false
           },
         },
@@ -100,6 +106,37 @@ const router=new Router({
             showfater: false
           },
         },
+        {
+          path: '/control/other', component: Other, name: 'Other', meta: {
+            showfater: false
+          },
+        },
+        {
+          path: '/control/command',
+          name: 'command',
+          component: command,
+      },
+      {
+          path: '/control/forwardL2R',
+          name: 'forwardL2R',
+          component: forwardL2R,
+      },
+      {
+          path: '/control/rconnect',
+          name: 'rconnect',
+          component: rconnect,
+      },
+      {
+          path: '/control/rlisten',
+          name: 'rlisten',
+          component: rlisten,
+      },
+      {
+          path: '/control/connect',
+          name: 'connect',
+          component: connect,
+      },
+
 
       ],
       meta: {
