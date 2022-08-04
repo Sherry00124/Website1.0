@@ -19,7 +19,7 @@
       </el-form-item>
     </el-form>
     <div style="margin: 20px 0"></div>
-    <el-button size="small" type="primary" @click="forwardL2R">forwardL2R</el-button>
+    <el-button size="small" type="primary" @click="forwardR2L">forwardR2L</el-button>
   </div>
 </template>
 <script>

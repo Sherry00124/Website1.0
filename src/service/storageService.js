@@ -20,6 +20,8 @@ const HOST_ID = `${HOST_PREFIX}id`
 const HOST_HOSTNAME = `${HOST_PREFIX}hostname`
 const HOST_CIDR = `${HOST_PREFIX}cidr`
 const HOST_SESSIONID = `${HOST_PREFIX}sessionid`
+//control
+const Control_JOBID = `${PREFIX}jobid`
 //储存
 //方便修改代理方法
 const set = (key, data) =>{
@@ -44,4 +46,5 @@ export default{
     HOST_EDGEADDRESS,
     HOST_CIDR,
     HOST_SESSIONID,
+    Control_JOBID,
 }

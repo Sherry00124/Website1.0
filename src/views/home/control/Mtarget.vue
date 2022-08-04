@@ -1,7 +1,7 @@
 <template>
   <div id="Mtarget">
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item>详细信息</el-breadcrumb-item>
+    <!-- <el-page-header  content="详细信息"></el-page-header> -->
       <el-breadcrumb-item>编号：{{this.$route.params.id}}</el-breadcrumb-item>
       <el-breadcrumb-item>主机名：{{this.$route.params.hostName}}</el-breadcrumb-item>
       <el-breadcrumb-item>Address：{{this.$route.params.address}}</el-breadcrumb-item>

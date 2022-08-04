@@ -25,6 +25,9 @@
       <el-tab-pane label="RListen">
         <RlistenVue/>
       </el-tab-pane>
+      <el-tab-pane label="jobs">
+        <jobsVue/>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -49,6 +52,7 @@ import CommandVue from "../../tool/command.vue";
 import RConnectVue from "../../tool/rconnect.vue";
 import ForwardVue from "../../tool/forward.vue";
 import RlistenVue from "../../tool/rlisten.vue";
+import jobsVue from "../../tool/jobs.vue";
 export default {
   name: "Manage",
   components: {
@@ -59,6 +63,7 @@ export default {
     RConnectVue,
     ForwardVue,
     RlistenVue,
+    jobsVue,
   },
   data() {
     return {
