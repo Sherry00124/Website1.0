@@ -19,15 +19,11 @@
             <i class="el-icon-monitor"></i>
             <router-link to="/home/Host" class="redTextWithoutUnderline">主机</router-link>
           </el-menu-item>
+          
           <el-menu-item index="2">
             <i class="el-icon-suitcase"></i>
             <router-link to="/home/Kit" class="redTextWithoutUnderline">工具</router-link>
           </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-setting"></i>
-            <router-link to="/home/Set" class="redTextWithoutUnderline">设置</router-link>
-          </el-menu-item>
-
         </el-menu>
 
         <div style="margin: 350px 0"></div>

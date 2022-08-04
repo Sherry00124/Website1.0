@@ -8,6 +8,7 @@
       <router-link to="/command">command</router-link> 
       <router-link to="/rlisten">rlisten</router-link> 
       <router-link to="/forwardL2R">forwardL2R</router-link> -->
+      <!-- <router-link to="/CV">复制</router-link> -->
       <router-view />
       </div>
   </div>

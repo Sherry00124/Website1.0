@@ -5,14 +5,21 @@ const PREFIX = 'RLP_'
 //user 模块
 
 const USER_PREFIX = `${PREFIX}user_`
-const HOST_PREFIX = `${PREFIX}host_`
 const USER_TOKEN = `${USER_PREFIX}token`
 const USER_INFO = `${USER_PREFIX}info`
 const HOST_MUMA = `${HOST_PREFIX}muma`
-const HOST_FILENAME = `${HOST_PREFIX}filename`
-// const HOST_ADDRESS = `${HOST_PREFIX}address`
-// const HOST_EGDEADDRESS = `${HOST_PREFIX}edgeaddress`
-// const HOST_STATUS = `${HOST_PREFIX}status`
+//Mtarget中文件下載
+const FILE_PREFIX = `${PREFIX}file_`
+const R_FILEPATH = `${FILE_PREFIX}rfilepath`
+const L_FILEPATH = `${FILE_PREFIX}lfilepath`
+//HOST中保存表格信息
+const HOST_PREFIX = `${PREFIX}form_`
+const HOST_ADDRESS = `${HOST_PREFIX}address`
+const HOST_EDGEADDRESS = `${HOST_PREFIX}edgeaddress`
+const HOST_ID = `${HOST_PREFIX}id`
+const HOST_HOSTNAME = `${HOST_PREFIX}hostname`
+const HOST_CIDR = `${HOST_PREFIX}cidr`
+const HOST_SESSIONID = `${HOST_PREFIX}sessionid`
 //储存
 //方便修改代理方法
 const set = (key, data) =>{
@@ -29,13 +36,12 @@ export default{
     USER_TOKEN,
     USER_INFO,
     HOST_MUMA,
-    HOST_FILENAME,
-    // HOST_ID,
-    // HOST_NAME,
-    // HOST_ADDRESS,
-    // HOST_EGDEADDRESS,
-    // HOST_STATUS,
-
-
-
+    R_FILEPATH,
+    L_FILEPATH,
+    HOST_ID,
+    HOST_HOSTNAME,
+    HOST_ADDRESS,
+    HOST_EDGEADDRESS,
+    HOST_CIDR,
+    HOST_SESSIONID,
 }

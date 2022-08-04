@@ -32,7 +32,7 @@ export default {
     return {
       ruleForm: {
         lfilepath: "",
-        rfilepath: "/tmp/1"
+        rfilepath: storageService.get(storageService.R_FILEPATH),
       },
       fileList:[],
     };
@@ -40,7 +40,7 @@ export default {
   methods: {
     Upload() {
       let id = this.$route.params.id
-      let lfilepath = storageService.get(storageService.HOST_FILENAME);
+      let lfilepath = storageService.get(storageService.UPLOAD_FILENME);
       console.log('lfilepath: ', lfilepath);
       let rfilepath = this.ruleForm.rfilepath;
       this.axios.post(
@@ -58,7 +58,7 @@ export default {
     handleChange(file, fileLists) {
 			// console.log("file",file);
       // this.fileList ={ name:file.name};
-      storageService.set(storageService.HOST_FILENAME,document.getElementsByClassName("el-upload__input")[0].value); 
+      storageService.set(storageService.UPLOAD_FILENME,document.getElementsByClassName("el-upload__input")[0].value); 
 			// 本地电脑路径
 			console.log("本地电脑路径",document.getElementsByClassName("el-upload__input")[0].value); 
 		},

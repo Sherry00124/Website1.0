@@ -1,16 +1,14 @@
 <template>
   <div id="Mtarget">
     <el-breadcrumb separator="/">
-    <el-breadcrumb-item>详细信息</el-breadcrumb-item>
-  <el-breadcrumb-item>编号：{{this.$route.params.id}}</el-breadcrumb-item>
-  <el-breadcrumb-item>主机名：{{this.$route.params.hostName}}</el-breadcrumb-item>
-  <el-breadcrumb-item>Address：{{this.$route.params.address}}</el-breadcrumb-item>
-  <el-breadcrumb-item>edgeAddress：{{this.$route.params.edgeAddress}} </el-breadcrumb-item>
-</el-breadcrumb>
+      <el-breadcrumb-item>详细信息</el-breadcrumb-item>
+      <el-breadcrumb-item>编号：{{this.$route.params.id}}</el-breadcrumb-item>
+      <el-breadcrumb-item>主机名：{{this.$route.params.hostName}}</el-breadcrumb-item>
+      <el-breadcrumb-item>Address：{{this.$route.params.address}}</el-breadcrumb-item>
+      <el-breadcrumb-item>edgeAddress：{{this.$route.params.edgeAddress}}</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-row :gutter="10">
-      
       <el-col :span="8" @contextmenu.prevent.native="openMenu($event)">
-        
         <h1>文件夹列表</h1>
         <el-form :model="ruleForm" status-icon ref="ruleForm" label-width="50px">
           <el-row>
@@ -42,15 +40,32 @@
               </span>
             </el-tree>
           </el-scrollbar>
+
+          <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
+            <li>
+              <el-button
+                type="text"
+                icon="el-icon-document-copy"
+                v-clipboard:copy="ruleForm.path"
+                v-clipboard:success="onCopy"
+                v-clipboard:error="onError"
+              >复制文件夹路径</el-button>
+            </li>
+          </ul>
         </div>
       </el-col>
-      <el-col :span="16" @contextmenu.prevent.native="openMenu($event)">
+      <el-col :span="16" @contextmenu.prevent.native="openMenu1($event)">
         <el-col>
-          <h1>文件列表</h1> 
-          
+          <h1>文件列表</h1>
         </el-col>
 
-        <el-table :data="tableData1" style="width: 100%" height="420">
+        <el-table
+          :data="tableData1"
+          style="width: 100%"
+          height="420"
+          highlight-current-row
+          @row-contextmenu="getRemoteFilePath"
+        >
           <el-table-column prop="fileName" label="文件名" width="300">
             <template slot-scope="scope">
               <i class="el-icon-document"></i>
@@ -59,103 +74,36 @@
           </el-table-column>
           <el-table-column prop="fileSize" label="大小" width="120"></el-table-column>
           <el-table-column prop="modifyTime" label="修改时间" width="250"></el-table-column>
-          <el-table-column fixed="right" label="操作">
-            <template>
-              <el-button  type="text" size="small"><router-link to="/download">下载</router-link> </el-button>
-            </template>
-          </el-table-column>
         </el-table>
+        <ul v-show="visible1" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
+          <li>
+            <el-button type="text" icon="el-icon-upload2" @click="dialog = true">文件上传</el-button>
+          </li>
+          <li>
+            <el-upload :auto-upload="false" :on-change="getLocalFilePath" action>
+              <el-button type="text" icon="el-icon-upload2">文件下载</el-button>
+            </el-upload>
+          </li>
+        </ul>
       </el-col>
     </el-row>
-    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
-      <li>
-        <el-button type="text" icon="el-icon-document-copy" @click="doCopy" class="TextWithoutUnderline">copy</el-button>
-      </li>
-      <li>
-        <el-button type="text" icon="el-icon-upload" @click="dialog = true">upload</el-button>
-      </li>
-      <li>
-        <el-button type="text" icon="el-icon-document-copy"><router-link to="/control/rconnect" class="TextWithoutUnderline">rconnect</router-link></el-button>
-      </li>
-      <li>
-        <el-button type="text" icon="el-icon-document-copy" ><router-link  class="TextWithoutUnderline" to="/control/command">command</router-link></el-button>
-      </li>
-      <li>
-        <el-button type="text" icon="el-icon-document-copy"  ><router-link class="TextWithoutUnderline" to="/control/forwardL2R">forwardL2R</router-link></el-button>
-      </li>
-      <li>
-        <el-button type="text" icon="el-icon-document-copy"  ><router-link to="/control/rlisten" class="TextWithoutUnderline">rlisten</router-link></el-button>
-      </li>
-    </ul>
+
     <el-drawer
-  title="请填写上传信息"
-  :before-close="handleClose"
-  :visible.sync="dialog"
-  direction="ltr"
-  custom-class="demo-drawer"
-  ref="drawer"
-  >
-  <div class="demo-drawer__content">
-    <uploadVue/>
-    <!-- <div class="demo-drawer__footer">
+      title="请填写上传信息"
+      :before-close="handleClose"
+      :visible.sync="dialog"
+      direction="ltr"
+      custom-class="demo-drawer"
+      ref="drawer"
+    >
+      <div class="demo-drawer__content">
+        <uploadVue />
+        <!-- <div class="demo-drawer__footer">
       <el-button @click="dialog = false">取 消</el-button>
       <el-button type="primary" @click="$refs.drawer.closeDrawer()" :loading="loading">{{ loading ? '提交中 ...' : '确 定' }}</el-button>
-    </div> -->
-  </div>
-</el-drawer>
-<!-- <el-drawer
-  title="请填写连接信息"
-  :before-close="handleClose"
-  :visible.sync="dialog"
-  direction="ltr"
-  custom-class="demo-drawer"
-  ref="drawer"
-  >
-  <div class="demo-drawer__content">
-    <connectVue/>
-  </div>
-</el-drawer> -->
-    <!-- <div style="margin: 10px 0"></div> -->
-    <!-- <el-row :gutter="20">
-      
-      <el-col :span="16">
-        <div class="grid-content bg-purple">
-          <el-table :data="tableData2" style="width: 100%" height="130">
-            <el-table-column prop="id" label="编号" width="120"></el-table-column>
-            <el-table-column prop="updated_at" label="时间" width="200"></el-table-column>
-            <el-table-column prop="name" label="文件名" width="120"></el-table-column>
-            <el-table-column prop="address" label="存放地址" width="150"></el-table-column>
-            <el-table-column
-              prop="tag"
-              label="状态"
-              width="100"
-              :filters="[
-                { text: '成功', value: '成功' },
-                { text: '失败', value: '失败' },
-              ]"
-              :filter-method="filterTag"
-              filter-placement="bottom-end"
-            >
-              <template slot-scope="scope">
-                <el-tag
-                  :type="scope.row.tag === '失败' ? 'danger' : 'success'"
-                  disable-transitions
-                >{{ scope.row.tag }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button
-                  @click.native.prevent="deleteRow(scope.$index, tableData2)"
-                  type="text"
-                  size="small"
-                >移除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-      </el-col>
-    </el-row>-->
+        </div>-->
+      </div>
+    </el-drawer>
   </div>
 </template>
 <style>
@@ -197,20 +145,20 @@
   cursor: pointer;
 }
 .contextmenu li:hover {
-  background: rgb(246, 148, 148);
+  background: rgba(204, 226, 244, 0.708);
 }
 .grid-content {
   border-radius: 4px;
   min-height: 250px;
 }
 .TextWithoutUnderline {
-    text-decoration: none;
-    color: rgb(46, 180, 243);
-  }
+  text-decoration: none;
+  color: rgb(46, 180, 243);
+}
 </style>
 <script>
-import uploadVue from '@/views/tool/upload.vue';
-import connectVue from '../../tool/connect.vue';
+import uploadVue from "@/views/tool/upload.vue";
+import storageService from "../../../service/storageService";
 export default {
   name: "Manage",
 
@@ -223,13 +171,14 @@ export default {
       },
       tabPosition: "right",
       tableData1: [],
-      tableData2: [],
+      // tableData2: [],
       treeData: [],
       defaultProps: {
         //children: 'children',
         label: "label"
       },
       visible: false,
+      visible1: false,
       top: 0,
       left: 0
     };
@@ -252,50 +201,99 @@ export default {
         // 移除body上添加的事件处理程序
         document.body.removeEventListener("click", this.closeMenu);
       }
+    },
+    visible1(newValue1, oldValue) {
+      if (newValue1) {
+        //菜单显示的时候
+        // document.body.addEventListener，document.body.removeEventListener它们都接受3个参数
+        // ("事件名" , "事件处理函数" , "布尔值");
+        // 在body上添加事件处理程序
+        document.body.addEventListener("click", this.closeMenu);
+      } else {
+        //菜单隐藏的时候
+        // 移除body上添加的事件处理程序
+        document.body.removeEventListener("click", this.closeMenu);
+      }
     }
   },
-  components:{
+  components: {
     uploadVue,
-    connectVue,
   },
 
   methods: {
-    handleClose(done) {
-      // this.$confirm('确定要提交表单吗？')
-      //   .then(_ => {
-      //     this.loading = true;
-      //     setTimeout(() => {
-      //       this.loading = false;
-            done();
-      //     }, 2000);
-      //   })
-      //   .catch(_ => {});
+    //右键表格获取获取远程文件路径
+    getRemoteFilePath(val) {
+      let fileName = val.name;
+      console.log("this.currentRow: ", fileName);
+      let filePath = this.ruleForm.path;
+      let Path = filePath + fileName;
+      console.log("Path: ", Path);
+      storageService.set(storageService.R_FILEPATH, Path);
     },
+    //获取本地文件路径
+    getLocalFilePath(file, fileLists) {
+      // console.log("file",file);
+      // this.fileList ={ name:file.name};
+      storageService.set(
+        storageService.L_FILEPATH,
+        document.getElementsByClassName("el-upload__input")[0].value
+      );
+      // 本地电脑路径
+      // console.log("本地电脑路径",document.getElementsByClassName("el-upload__input")[0].value);
+      this.Download();
+    },
+    Download() {
+      let id = this.$route.params.id;
+      let lfilepath = storageService.get(storageService.L_FILEPATH);
+      console.log("lfilepath: ", lfilepath);
+      let rfilepath = storageService.get(storageService.R_FILEPATH);
+      console.log("rfilepath: ", rfilepath);
+      this.axios
+        .post(
+          "http://47.242.238.155:9996/sessions/" +
+            id +
+            "/download" +
+            "?lfilepath=" +
+            lfilepath +
+            "&rfilepath=" +
+            rfilepath
+        )
+        .then(res => {
+          console.log("res.data: ", res.data);
+          this.$message(res.data);
+        });
+    },
+    //关闭抽屉
+    handleClose(done) {
+      done();
+    },
+    //获取鼠标右键的位置
     openMenu(e) {
+      this.visible1 = false;
       var x = e.pageX; //这个应该是相对于整个浏览器页面的x坐标，左上角为坐标原点（0,0）
       var y = e.pageY; //这个应该是相对于整个浏览器页面的y坐标，左上角为坐标原点（0,0）
       this.top = y;
       this.left = x;
       this.visible = true; //显示菜单
     },
+    openMenu1(e) {
+      this.visible = false;
+      var x = e.pageX; //这个应该是相对于整个浏览器页面的x坐标，左上角为坐标原点（0,0）
+      var y = e.pageY; //这个应该是相对于整个浏览器页面的y坐标，左上角为坐标原点（0,0）
+      this.top = y;
+      this.left = x;
+      this.visible1 = true; //显示菜单
+    },
     //关闭菜单
     closeMenu() {
       this.visible = false; //关闭菜单
+      this.visible1 = false;
     },
-    doCopy: function() {
-      this.$copyText(this.message).then(
-        function(e) {
-          alert("Copied");
-          console.log(e);
-        },
-        function(e) {
-          alert("Can not copy");
-          console.log(e);
-        }
-      );
+    onCopy: function(e) {
+      alert("You just copied: " + e.text);
     },
-    filterTag(value, row) {
-      return row.tag === value;
+    onError: function(e) {
+      alert("Failed to copy texts");
     },
 
     handleNodeClick(data) {
@@ -322,9 +320,15 @@ export default {
 
     getData() {
       //表格
-      let id = this.$route.params.id
-      console.log('id: ', id);
-      this.axios.post("http://47.242.238.155:9996/sessions/" + id + "/dir" +"?path=" +this.ruleForm.path,)
+      let id = this.$route.params.id;
+      this.axios
+        .post(
+          "http://47.242.238.155:9996/sessions/" +
+            id +
+            "/dir" +
+            "?path=" +
+            this.ruleForm.path
+        )
         .then(res => {
           let j = 0;
           let DataList = [];
@@ -352,10 +356,12 @@ export default {
     },
     loadNode() {
       //目录
-      let id = this.$route.params.id
+      let id = this.$route.params.id;
       this.axios
         .post(
-          "http://47.242.238.155:9996/sessions/" + id + "/dir" +
+          "http://47.242.238.155:9996/sessions/" +
+            id +
+            "/dir" +
             "?path=" +
             this.ruleForm.path
         )

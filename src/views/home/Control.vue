@@ -52,7 +52,7 @@
 </style>
 
 <script>
-import Nav from "./Cnav.vue";
+
 import { mapActions } from "vuex";
 import { mapState } from "vuex";
 export default {
@@ -66,7 +66,7 @@ export default {
     userInfo: state => state.userModule.userInfo
   }),
   components: {
-    Nav
+    
   }
 };
 </script>

@@ -16,7 +16,7 @@ import Xshell from '../views/home/control/Xshell'
 import WebSSH from '../views/home/control/XWebSSH'
 import UserIndex from '@/views/user/UserIndex'
 import muma from '../views/home/muma.vue'
-import Other from '../views/home/control/Other'
+
 
 
 import userRoute from './module/user'
@@ -24,11 +24,7 @@ import userRoute from './module/user'
 import storageService from "../service/storageService";
 import toolRoute from './module/tools'
 
-import connect from '@/views/tool/connect.vue'
-import rconnect from '@/views/tool/rconnect.vue'
-import command from '@/views/tool/command.vue'
-import forwardL2R from '@/views/tool/forwardL2R.vue'
-import rlisten from '@/views/tool/rlisten.vue'
+
 Vue.use(Router)
 
 
@@ -64,6 +60,7 @@ const router=new Router({
       },
         { path: '/home/Kit', component: Kit },
         { path: '/home/muma', component: muma },
+
 
       ]
     },
@@ -106,36 +103,7 @@ const router=new Router({
             showfater: false
           },
         },
-        {
-          path: '/control/other', component: Other, name: 'Other', meta: {
-            showfater: false
-          },
-        },
-        {
-          path: '/control/command',
-          name: 'command',
-          component: command,
-      },
-      {
-          path: '/control/forwardL2R',
-          name: 'forwardL2R',
-          component: forwardL2R,
-      },
-      {
-          path: '/control/rconnect',
-          name: 'rconnect',
-          component: rconnect,
-      },
-      {
-          path: '/control/rlisten',
-          name: 'rlisten',
-          component: rlisten,
-      },
-      {
-          path: '/control/connect',
-          name: 'connect',
-          component: connect,
-      },
+  
 
 
       ],

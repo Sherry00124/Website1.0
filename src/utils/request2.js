@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({//主机和目标管理
-    baseURL: 'http://47.242.238.155:9996',
+    baseURL: 'https://1e666873-df02-4da6-a9ba-92350cb1b27c.mock.pstmn.io',
     timeout: 1000 * 5,
 })
 
